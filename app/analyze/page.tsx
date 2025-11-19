@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
 import { api } from "@/utils/api";
 import Sidebar from "@/components/Sidebar";
 
@@ -23,23 +21,10 @@ interface AnalysisResult {
 }
 
 export default function AnalyzePage() {
-  const { data: session, status } = useSession();
   const [text, setText] = useState("");
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  if (status === "loading") {
-    return (
-      <div className="h-screen flex items-center justify-center">
-        <p className="text-lg">Loading...</p>
-      </div>
-    );
-  }
-
-  if (!session) {
-    redirect("/login");
-  }
 
   const handleAnalyze = async () => {
     if (!text.trim()) {
