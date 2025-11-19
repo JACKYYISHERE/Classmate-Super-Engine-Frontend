@@ -1,65 +1,169 @@
-import Image from "next/image";
+"use client";
+
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import Link from "next/link";
 
 export default function Home() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.push("/dashboard");
+    }
+  }, [status, router]);
+
+  if (status === "loading") {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <p className="text-lg">Loading...</p>
+      </div>
+    );
+  }
+
+  if (status === "authenticated") {
+    return null; // Will redirect
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div className="min-h-screen bg-white">
+      {/* Header */}
+      <div className="max-w-7xl mx-auto px-8 py-16">
+        {/* Main Title */}
+        <div className="mb-12">
+          <h1 className="text-6xl font-bold text-gray-900 mb-4">
+            Your Skills.{" "}
+            <span className="gradient-text">Re-Engineered</span>{" "}
+            <span className="text-purple-600">with AI.</span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-xl text-gray-600 max-w-2xl mt-6">
+            Classmate builds your real skill graph, diagnoses your gaps, and
+            generates a personalized career and learning blueprint — no matter
+            what stage you're in.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+        {/* CTA Buttons */}
+        <div className="flex gap-4 mb-16">
+          <Link
+            href="/analyze"
+            className="px-8 py-4 gradient-purple-pink text-white rounded-lg font-semibold hover:opacity-90 transition shadow-lg"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            Try it out →
+          </Link>
+          <Link
+            href="/about"
+            className="px-8 py-4 bg-white border-2 border-gray-300 text-gray-700 rounded-lg font-semibold hover:border-gray-400 transition"
           >
-            Documentation
-          </a>
+            Learn how it works
+          </Link>
         </div>
-      </main>
+
+        {/* Feature Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* AI Skill Graph */}
+          <div className="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-lg transition">
+            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+              <svg
+                className="w-6 h-6 text-purple-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              AI Skill Graph
+            </h3>
+            <p className="text-sm text-gray-600">
+              Your abilities, mapped with scientific precision.
+            </p>
+          </div>
+
+          {/* Skill Gap Engine */}
+          <div className="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-lg transition">
+            <div className="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mb-4">
+              <svg
+                className="w-6 h-6 text-pink-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              Skill Gap Engine
+            </h3>
+            <p className="text-sm text-gray-600">
+              Know exactly what separates you from your next role.
+            </p>
+          </div>
+
+          {/* Career Path Blueprint */}
+          <div className="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-lg transition">
+            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+              <svg
+                className="w-6 h-6 text-purple-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
+                />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              Career Path Blueprint
+            </h3>
+            <p className="text-sm text-gray-600">
+              Structured progression from entry to leadership.
+            </p>
+          </div>
+
+          {/* Job Match Intelligence */}
+          <div className="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-lg transition">
+            <div className="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mb-4">
+              <svg
+                className="w-6 h-6 text-pink-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
+                />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              Job Match Intelligence
+            </h3>
+            <p className="text-sm text-gray-600">
+              Your profile → real job roles, ranked by fit.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
