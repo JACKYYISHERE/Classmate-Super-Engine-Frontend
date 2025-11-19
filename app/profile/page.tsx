@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import Sidebar from "@/components/Sidebar";
 
 interface UserSkill {
   name: string;
@@ -60,33 +61,13 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Navigation */}
-      <nav className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-8">
-              <Link href="/dashboard" className="text-xl font-bold text-black">
-                Classmate
-              </Link>
-              <Link
-                href="/profile"
-                className="px-3 py-2 text-black font-semibold"
-              >
-                Profile
-              </Link>
-            </div>
-            <button
-              onClick={() => signOut()}
-              className="px-4 py-2 text-sm text-gray-700 hover:text-black transition"
-            >
-              Sign Out
-            </button>
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-white flex">
+      {/* Sidebar */}
+      <Sidebar />
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Main Content */}
+      <div className="flex-1 p-8">
+        <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">Your Profile</h1>
@@ -331,6 +312,7 @@ export default function ProfilePage() {
               </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </div>
